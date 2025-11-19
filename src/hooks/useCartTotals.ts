@@ -8,29 +8,29 @@ export function useCartTotals(
     return useMemo<Subtotal>(() => {
         const items = normalized ?? []
 
-        const { base, totalQty } = items.reduce(
+        const { base, discount, finalPrice } = items.reduce(
             (acc, i) => {
                 const qty = i.quantity ?? 1
                 const price = i.price ?? 0
-                acc.base += price * qty
-                acc.totalQty += qty
+                const lineBase = price * qty
+                const lineDiscountRate =
+                    qty > DISCOUNT_AMOUNT ? DISCOUNT_PERCENTAGE : 0
+                const lineDiscount = lineBase * lineDiscountRate
+                const lineFinal = lineBase - lineDiscount
+
+                acc.base += lineBase
+                acc.discount += lineDiscount
+                acc.finalPrice += lineFinal
                 return acc
             },
-            { base: 0, totalQty: 0 }
+            { base: 0, finalPrice: 0, discount: 0 }
         )
 
-        const hasBulkDiscount = totalQty > DISCOUNT_AMOUNT
-        const discountRate = hasBulkDiscount ? DISCOUNT_PERCENTAGE : 0
-
-        const totalPrice = base
-        const discount = base * discountRate
-        const finalPrice = base - discount
-
         return {
-            totalPrice,
+            totalPrice: base,
             discount,
             finalPrice,
-            discountRate,
+            discountRate: finalPrice === base ? 0 : DISCOUNT_PERCENTAGE,
         }
     }, [normalized])
 }

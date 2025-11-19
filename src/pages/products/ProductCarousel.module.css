@@ -75,6 +75,8 @@
     transition: flex-basis var(--transition), transform var(--transition), box-shadow var(--transition);
 }
 
+.card + .card { margin-left: var(--gap); }
+
 .card:hover {
     transform: translateY(-4px);
     box-shadow: 0 14px 34px rgba(0, 0, 0, .35);
@@ -82,13 +84,15 @@
 
 @media (min-width: 768px) {
     .card {
-        flex-basis: calc((100% - var(--gap)) / 2);
+        flex-basis: calc((100% - var(--gap)) / 3);
     }
+    .card + .card { margin-left: 0; }
+    .track { gap: var(--gap); }
 }
 
 @media (min-width: 1024px) {
     .card {
-        flex-basis: calc((100% - (var(--gap) * 2)) / 3);
+        flex-basis: calc((100% - (var(--gap) * 2)) / 4);
     }
 }
 
@@ -188,19 +192,6 @@
     .btn {
         transition: none !important;
     }
-}
-
-.track { gap: 0; }
-.card  { flex: 0 0 100%; }
-.card + .card { margin-left: var(--gap); }
-
-@media (min-width: 768px) {
-    .track { gap: var(--gap); }
-    .card + .card { margin-left: 0; }
-    .card { flex-basis: calc((100% - var(--gap)) / 2); }
-}
-@media (min-width: 1024px) {
-    .card { flex-basis: calc((100% - (var(--gap) * 2)) / 3); }
 }
 
 @media (hover: none), (pointer: coarse) {
